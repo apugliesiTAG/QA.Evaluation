@@ -34,7 +34,6 @@ namespace Repository
         {
             return FindByCondition(owner => owner.Id.Equals(ownerId))
                 .Include(o => o.Accounts)
-                .DefaultIfEmpty(new Owner())
                 .FirstOrDefault();
 
         }

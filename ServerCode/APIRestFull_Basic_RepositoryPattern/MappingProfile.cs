@@ -15,6 +15,12 @@ namespace APIRestFull_Basic_RepositoryPattern
             CreateMap<User, UserDto>();
             CreateMap<UserForCreationDto, User>();
             CreateMap<UserForUpdateDto, User>();
+
+            CreateMap<Owner, OwnerDto>();
+            CreateMap<OwnerForCreateDto, Owner>();
+            CreateMap<OwnerForUpdateDto, Owner>();
+
+            CreateMap<Account, AccountDto>();
         }
     }
 }
