@@ -15,6 +15,6 @@ namespace Entities.DataTransferObjects
 
         public string Address { get; set; }
 
-        public List<Account> Accounts { get; set; }
+        public List<AccountDto> Accounts { get; set; }
     }
 }
