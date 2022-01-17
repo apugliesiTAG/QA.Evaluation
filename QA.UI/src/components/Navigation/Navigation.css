@@ -3,3 +3,8 @@ div a.active, ul li.active{
     font-style: italic!important;
     color: #fff!important;
 }
+
+.menu{
+    color: #ffffff;
+    background-color: #004990;
+}

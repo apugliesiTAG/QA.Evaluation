@@ -20,7 +20,7 @@ class App extends Component {
   render() {
     return (
       <BrowserRouter>
-        <Layout>
+        <Layout id="root">
           <Switch>
             <Route path="/" exact component={Home} />
             <Route path="/owner-list" component={AsyncOwnerList} />
