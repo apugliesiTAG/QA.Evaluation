@@ -15,6 +15,7 @@ namespace Entities
         public DbSet<User> Users { get; set; }
         public DbSet<Owner> Owners { get; set; }
         public DbSet<Account> Accounts { get; set; }
+        public DbSet<Shipper> Shippers { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<User>(entity => {
@@ -33,6 +34,10 @@ namespace Entities
                 .HasOne(o => o.Owner)
                 .WithMany(a => a.Accounts)
                 .HasForeignKey(oa => oa.OwnerId);
+
+            builder.Entity<Shipper>(entity => {
+                entity.HasKey(e => e.Id);
+            });
         }
     }
 }

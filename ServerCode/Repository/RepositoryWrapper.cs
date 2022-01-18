@@ -12,6 +12,7 @@ namespace Repository
         private IUserRepository _user;
         private IOwnerRepository _owner;
         private IAccountRepository _account;
+        private IShipperRepository _shipper;
         public IUserRepository User
         {
             get
@@ -46,6 +47,18 @@ namespace Repository
                 }
 
                 return _account;
+            }
+        }
+        public IShipperRepository Shipper
+        {
+            get
+            {
+                if (_shipper == null)
+                {
+                    _shipper = new ShipperRepository(_repoContext);
+                }
+
+                return _shipper;
             }
         }
         public RepositoryWrapper(RepositoryContext repositoryContext)

@@ -21,6 +21,9 @@ namespace APIRestFull_Basic_RepositoryPattern
             CreateMap<OwnerForUpdateDto, Owner>();
 
             CreateMap<Account, AccountDto>();
+
+            CreateMap<Shipper, ShipperDto>();
+            CreateMap<ShipperDto, Shipper>();
         }
     }
 }

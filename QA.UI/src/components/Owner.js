@@ -46,9 +46,10 @@ const customersData = createStore({
 
 const shippersData = createStore({
   key: 'Value',
-  loadUrl: `${url}/ShippersLookup`,
+  //loadUrl: `${url}/ShippersLookup`,
+  loadUrl: `http://localhost:5000/api/Shipper/ShippersLookup`,
   onBeforeSend: (method, ajaxOptions) => {
-    ajaxOptions.xhrFields = { withCredentials: true };
+    ajaxOptions.xhrFields = { withCredentials: false };
   },
 });
 

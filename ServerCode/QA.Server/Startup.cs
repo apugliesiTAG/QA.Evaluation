@@ -37,7 +37,8 @@ namespace APIRestFull_Basic_RepositoryPattern
             services.ConfigureRepositoryWrapper();
             services.AddAutoMapper(typeof(Startup));
             services.AddSwaggerGen();
-            services.AddControllers();
+            services.AddControllers()
+                .AddJsonOptions(opts => opts.JsonSerializerOptions.PropertyNamingPolicy = null);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
