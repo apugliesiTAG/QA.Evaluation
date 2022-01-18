@@ -28,12 +28,12 @@ const apiurl = 'http://localhost:5000/api';
 
 const dataSource = createStore({
   key: 'OrderID',
-  loadUrl: `${url}/Orders`,
+  loadUrl: `${apiurl}/Order/Orders`,
   insertUrl: `${url}/InsertOrder`,
   updateUrl: `${url}/UpdateOrder`,
   deleteUrl: `${url}/DeleteOrder`,
   onBeforeSend: (method, ajaxOptions) => {
-    ajaxOptions.xhrFields = { withCredentials: true };
+    ajaxOptions.xhrFields = { withCredentials: false };
   },
 });
 
@@ -41,7 +41,7 @@ const customersData = createStore({
   key: 'Value',
   loadUrl: `${apiurl}/Customer/CustomersLookup`,
   onBeforeSend: (method, ajaxOptions) => {
-    ajaxOptions.xhrFields = { withCredentials: true };
+    ajaxOptions.xhrFields = { withCredentials: false };
   },
 });
 

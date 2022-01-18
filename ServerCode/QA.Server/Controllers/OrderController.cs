@@ -32,15 +32,17 @@ namespace QA.Server.Controllers
             _configuration = configuration;
             _apiurl = _configuration.GetValue<string>("WebAPIBaseUrl");
         }
-        [HttpGet("ShippersLookup")]
-        public IActionResult ShippersLookup()
+        [HttpGet("Orders")]
+        public IActionResult Orders()
         {
             try
             {
-                var shipper = _repository.Shipper.ShippersLookup();
-                _logger.LogInfo($"Returned all shippers from database.");
-                var shippersResult = _mapper.Map<IEnumerable<ShipperDto>>(shipper);
-                return Ok(new { data = shippersResult });
+                var orders = _repository.Order.OrdersLookup();
+                _logger.LogInfo($"Returned all orders from database.");
+                var ordersResult = _mapper.Map<IEnumerable<OrderDto>>(orders);
+                decimal[] sum = new decimal[1];
+                sum[0] = ordersResult.Sum(o => o.Freight);
+                return Ok(new { data = ordersResult, summary = sum  });
             }
             catch (Exception ex)
             {

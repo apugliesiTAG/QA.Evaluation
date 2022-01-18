@@ -6,8 +6,8 @@ namespace Entities.DataTransferObjects
 {
     public class OrderDto
     {
-        public int OrderId { get; set; }
-        public string CustomerId { get; set; }
+        public int OrderID { get; set; }
+        public string CustomerID { get; set; }
         public CustomerDto Customer { get; set; }
         public string Employee { get; set; }
         public int EmployeeId { get; set; }
