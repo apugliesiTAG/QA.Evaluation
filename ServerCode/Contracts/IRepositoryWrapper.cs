@@ -11,6 +11,7 @@ namespace Contracts
         IAccountRepository Account { get; }
         IShipperRepository Shipper { get; }
         ICustomerRepository Customer { get; }
+        IOrderRepository Order { get; }
         void Save();
     }
 }

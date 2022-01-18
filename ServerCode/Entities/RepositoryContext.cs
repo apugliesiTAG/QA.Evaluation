@@ -17,6 +17,7 @@ namespace Entities
         public DbSet<Account> Accounts { get; set; }
         public DbSet<Shipper> Shippers { get; set; }
         public DbSet<Customer> Customers { get; set; }
+        public DbSet<Order> Orders{ get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<User>(entity => {
@@ -40,6 +41,9 @@ namespace Entities
                 entity.HasKey(e => e.Id);
             });
             builder.Entity<Customer>(entity => {
+                entity.HasKey(e => e.Id);
+            });
+            builder.Entity<Order>(entity => {
                 entity.HasKey(e => e.Id);
             });
         }

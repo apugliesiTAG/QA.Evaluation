@@ -14,6 +14,7 @@ namespace Repository
         private IAccountRepository _account;
         private IShipperRepository _shipper;
         private ICustomerRepository _customer;
+        private IOrderRepository _order;
         public IUserRepository User
         {
             get
@@ -72,6 +73,18 @@ namespace Repository
                 }
 
                 return _customer;
+            }
+        }
+        public IOrderRepository Order
+        {
+            get
+            {
+                if (_order == null)
+                {
+                    _order = new OrderRepository(_repoContext);
+                }
+
+                return _order;
             }
         }
         public RepositoryWrapper(RepositoryContext repositoryContext)

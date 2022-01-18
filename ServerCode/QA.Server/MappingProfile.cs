@@ -35,6 +35,9 @@ namespace APIRestFull_Basic_RepositoryPattern
             CreateMap<CustomerDto, Customer>()
                 .ForMember(dest => dest.InteralId, opt => opt.MapFrom(src => src.Value))
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Text));
+
+            CreateMap<Order, OrderDto>();
+            CreateMap<OrderDto, Order>();
         }
     }
 }
