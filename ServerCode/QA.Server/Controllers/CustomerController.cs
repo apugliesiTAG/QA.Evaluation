@@ -10,21 +10,21 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace QA.Server.Controllers
 {
-    [Route("api/Shipper")]
+    [Route("api/Customer")]
     [ApiController]
-    public class ShipperController : ControllerBase
+    public class CustomerController : ControllerBase
     {
         private ILoggerManager _logger;
         private IRepositoryWrapper _repository;
         private IMapper _mapper;
         private IConfiguration _configuration;
         private string _apiurl;
-
-        public ShipperController(ILoggerManager logger, IRepositoryWrapper repository, IMapper mapper, IConfiguration configuration)
+        public CustomerController(ILoggerManager logger, IRepositoryWrapper repository, IMapper mapper, IConfiguration configuration)
         {
             _logger = logger;
             _repository = repository;
@@ -32,74 +32,74 @@ namespace QA.Server.Controllers
             _configuration = configuration;
             _apiurl = _configuration.GetValue<string>("WebAPIBaseUrl");
         }
-        [HttpGet("ShippersLookup")]
-        public IActionResult ShippersLookup()
+        [HttpGet("CustomersLookup")]
+        public IActionResult CustomersLookup()
         {
             try
             {
-                var shipper = _repository.Shipper.ShippersLookup();
+                var customer = _repository.Customer.CustomersLookup();
                 _logger.LogInfo($"Returned all shippers from database.");
-                var shippersResult = _mapper.Map<IEnumerable<ShipperDto>>(shipper);
-                return Ok(new { data = shippersResult });
+                var CustomersResult = _mapper.Map<IEnumerable<CustomerDto>>(customer);
+                return Ok(new { data = CustomersResult });
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Something went wrong inside ShippersLookup action: {ex.Message}");
+                _logger.LogError($"Something went wrong inside CustomersLookup action: {ex.Message}");
                 return StatusCode(500, "Internal server error");
             }
         }
-        [HttpGet("PopulateShipper")]
-        public async Task<IActionResult> PopulateShipper()
+        [HttpGet("PopulateCustomer")]
+        public async Task<IActionResult> PopulateCustomer()
         {
             try
             {
                 var httpClient = new HttpClient();
                 HttpResponseMessage response = await httpClient
-                                                .GetAsync(_apiurl + "/ShippersLookup").ConfigureAwait(false);
+                                                .GetAsync(_apiurl + "/CustomersLookup").ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
                 {
                     var result = await response.Content.ReadAsStringAsync();
-                    var customers = JsonConvert.DeserializeObject<ExternalApiShipperResponseDto>(result);
-                    customers.data.ForEach(c => _repository.Shipper.CreateShipper(_mapper.Map<Shipper>(c)));
-                    _logger.LogInfo($"Shippers table were populated.");
+                    var customers = JsonConvert.DeserializeObject<ExternalApiCustomerResponseDto>(result);
+                    customers.data.ForEach(c => _repository.Customer.CreateCustomer(_mapper.Map<Customer>(c)));
+                    _logger.LogInfo($"Customers table were populated.");
                     _repository.Save();
                     return NoContent();
                 }
-                else
+                else 
                 {
-                    return BadRequest("Cant populate shippers data");
-                }
-
+                    return BadRequest("Cant populate customers data");
+                }               
+                
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Something went wrong inside PopulateShipper action: {ex.Message}");
+                _logger.LogError($"Something went wrong inside PopulateCustomer action: {ex.Message}");
                 return StatusCode(500, "Internal server error");
             }
         }
         [HttpPost("Create")]
-        public IActionResult CreateShipper([FromBody] ShipperDto shipper)
+        public IActionResult CreateCustomer([FromBody] CustomerDto customer)
         {
             try
             {
-                if (shipper == null)
+                if (customer == null)
                 {
-                    _logger.LogError("shipper object sent from client is null.");
+                    _logger.LogError("customer object sent from client is null.");
                     return BadRequest("shipper object is null");
                 }
                 if (!ModelState.IsValid)
                 {
-                    _logger.LogError("Invalid shipper object sent from client.");
+                    _logger.LogError("Invalid customer object sent from client.");
                     return BadRequest("Invalid model object");
                 }
-                var shipperEntity = _mapper.Map<Shipper>(shipper);
-                _repository.Shipper.CreateShipper(shipperEntity);
+                var customerEntity = _mapper.Map<Customer>(customer);
+                _repository.Customer.CreateCustomer(customerEntity);
                 _repository.Save();
                 return NoContent();
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Something went wrong inside CreateShipper action: {ex.Message}");
+                _logger.LogError($"Something went wrong inside CreateCustomer action: {ex.Message}");
                 return StatusCode(500, "Internal server error");
             }
         }

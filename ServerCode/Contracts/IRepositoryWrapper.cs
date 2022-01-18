@@ -10,6 +10,7 @@ namespace Contracts
         IOwnerRepository Owner { get; }
         IAccountRepository Account { get; }
         IShipperRepository Shipper { get; }
+        ICustomerRepository Customer { get; }
         void Save();
     }
 }

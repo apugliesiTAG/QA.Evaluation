@@ -24,6 +24,7 @@ import { createStore } from 'devextreme-aspnet-data-nojquery';
 import MasterDetailGrid from './MasterDetailGrid.js';
 
 const url = 'https://js.devexpress.com/Demos/Mvc/api/DataGridWebApi';
+const apiurl = 'http://localhost:5000/api';
 
 const dataSource = createStore({
   key: 'OrderID',
@@ -38,7 +39,7 @@ const dataSource = createStore({
 
 const customersData = createStore({
   key: 'Value',
-  loadUrl: `${url}/CustomersLookup`,
+  loadUrl: `${apiurl}/Customer/CustomersLookup`,
   onBeforeSend: (method, ajaxOptions) => {
     ajaxOptions.xhrFields = { withCredentials: true };
   },
@@ -46,8 +47,7 @@ const customersData = createStore({
 
 const shippersData = createStore({
   key: 'Value',
-  //loadUrl: `${url}/ShippersLookup`,
-  loadUrl: `http://localhost:5000/api/Shipper/ShippersLookup`,
+  loadUrl: `${apiurl}/Shipper/ShippersLookup`,
   onBeforeSend: (method, ajaxOptions) => {
     ajaxOptions.xhrFields = { withCredentials: false };
   },
