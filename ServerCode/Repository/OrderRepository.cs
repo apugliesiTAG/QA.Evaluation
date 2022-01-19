@@ -33,5 +33,9 @@ namespace Repository
         {
             Update(order);
         }
+        public void DeleteOrder(Order order)
+        {
+            Delete(order);
+        }
     }
 }

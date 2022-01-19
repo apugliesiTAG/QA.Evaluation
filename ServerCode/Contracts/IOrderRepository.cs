@@ -11,5 +11,6 @@ namespace Contracts
         Order FindOrder(int Id);
         void CreateOrder(Order order);
         void UpdateOrder(Order order);
+        void DeleteOrder(Order order);
     }
 }

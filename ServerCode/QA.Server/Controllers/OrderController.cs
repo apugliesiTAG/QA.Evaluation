@@ -138,5 +138,36 @@ namespace QA.Server.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
+        [HttpDelete("DeleteOrder")]
+        public IActionResult DeleteOrder([FromForm] OrderFormDto order)
+        {
+            try
+            {
+                if (order == null)
+                {
+                    _logger.LogError("order object sent from client is null.");
+                    return BadRequest("order object is null");
+                }
+                if (!ModelState.IsValid)
+                {
+                    _logger.LogError("Invalid order object sent from client.");
+                    return BadRequest("Invalid model object");
+                }
+                var orderEntity = _repository.Order.FindOrder(order.key);
+                if (orderEntity == null)
+                {
+                    _logger.LogError($"Order with id: {order.key}, hasn't been found in db.");
+                    return NotFound();
+                }
+                _repository.Order.DeleteOrder(orderEntity);
+                _repository.Save();
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Something went wrong inside UpdateOrder action: {ex.Message}");
+                return StatusCode(500, "Internal server error");
+            }
+        }
     }
 }
