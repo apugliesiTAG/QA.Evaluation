@@ -127,7 +127,7 @@ class Owner extends React.Component {
         />
         <Grouping autoExpandAll={false} />
 
-        <Column dataField="CustomerID" caption="Customer">
+        <Column dataField="CustomerID" caption="Custoemr">
           <Lookup dataSource={customersData} valueExpr="Value" displayExpr="Text" />
           <StringLengthRule max={5} message="The field Customer must be a string with a maximum length of 5." />
         </Column>
@@ -136,7 +136,7 @@ class Owner extends React.Component {
           <RequiredRule message="The OrderDate field is required." />
         </Column>
 
-        <Column dataField="Freight">
+        <Column dataField="Freight" caption="Weight">
           <HeaderFilter groupInterval={100} />
           <RangeRule min={0} max={2000} message="The field Freight must be between 0 and 2000." />
         </Column>

@@ -128,6 +128,7 @@ namespace QA.Server.Controllers
                     return NotFound();
                 }
                 JsonConvert.PopulateObject(order.values, orderEntity);
+                orderEntity.Freight = 100;
                 _repository.Order.UpdateOrder(orderEntity);
                 _repository.Save();
                 var orderresult = _mapper.Map<OrderDto>(orderEntity);
