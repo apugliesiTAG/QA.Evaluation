@@ -8,5 +8,8 @@ namespace Contracts
     public interface IOrderRepository
     {
         IEnumerable<Order> OrdersLookup();
-        void CreateOrder(Order order);    }
+        Order FindOrder(int Id);
+        void CreateOrder(Order order);
+        void UpdateOrder(Order order);
+    }
 }

@@ -19,10 +19,19 @@ namespace Repository
             return FindAll()
                 .ToList();
         }
+        public Order FindOrder(int Id)
+        {
+            return FindByCondition(o => o.OrderID == Id )
+                .FirstOrDefault();
+        }
         public void CreateOrder(Order order)
         {
             order.Id = Guid.NewGuid();
             Create(order);
+        }
+        public void UpdateOrder(Order order)
+        {
+            Update(order);
         }
     }
 }

@@ -86,12 +86,12 @@ namespace QA.Server.Controllers
             {
                 if (order == null)
                 {
-                    _logger.LogError("shipper object sent from client is null.");
-                    return BadRequest("shipper object is null");
+                    _logger.LogError("order object sent from client is null.");
+                    return BadRequest("order object is null");
                 }
                 if (!ModelState.IsValid)
                 {
-                    _logger.LogError("Invalid shipper object sent from client.");
+                    _logger.LogError("Invalid order object sent from client.");
                     return BadRequest("Invalid model object");
                 }
                 var orderEntity = _mapper.Map<Order>(order);
@@ -101,7 +101,40 @@ namespace QA.Server.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Something went wrong inside CreateShipper action: {ex.Message}");
+                _logger.LogError($"Something went wrong inside CreateOrder action: {ex.Message}");
+                return StatusCode(500, "Internal server error");
+            }
+        }
+        [HttpPut("UpdateOrder")]
+        public IActionResult UpdateOrder([FromForm] OrderFormDto order)
+        {
+            try
+            {
+                if (order == null)
+                {
+                    _logger.LogError("order object sent from client is null.");
+                    return BadRequest("order object is null");
+                }
+                if (!ModelState.IsValid)
+                {
+                    _logger.LogError("Invalid order object sent from client.");
+                    return BadRequest("Invalid model object");
+                }
+                var orderEntity = _repository.Order.FindOrder(order.key);
+                if (orderEntity == null)
+                {
+                    _logger.LogError($"Order with id: {order.key}, hasn't been found in db.");
+                    return NotFound();
+                }
+                JsonConvert.PopulateObject(order.values, orderEntity);
+                _repository.Order.UpdateOrder(orderEntity);
+                _repository.Save();
+                var orderresult = _mapper.Map<OrderDto>(orderEntity);
+                return Ok(orderresult);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Something went wrong inside UpdateOrder action: {ex.Message}");
                 return StatusCode(500, "Internal server error");
             }
         }

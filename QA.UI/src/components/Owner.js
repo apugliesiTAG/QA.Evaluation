@@ -30,7 +30,7 @@ const dataSource = createStore({
   key: 'OrderID',
   loadUrl: `${apiurl}/Order/Orders`,
   insertUrl: `${url}/InsertOrder`,
-  updateUrl: `${url}/UpdateOrder`,
+  updateUrl: `${apiurl}/Order/UpdateOrder`,
   deleteUrl: `${url}/DeleteOrder`,
   onBeforeSend: (method, ajaxOptions) => {
     ajaxOptions.xhrFields = { withCredentials: false };
