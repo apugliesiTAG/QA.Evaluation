@@ -14,10 +14,21 @@ namespace Repository
             : base(repositoryContext)
         {
         }
-        public IEnumerable<Order> OrdersLookup()
+        public IEnumerable<Order> OrdersLookup(string filter)
         {
-            return FindAll()
+            if (filter != null && filter.Trim().Length > 0)
+            {
+                string[] search = filter.Replace("\"", string.Empty).Replace("[", string.Empty)
+                                    .Replace("]", string.Empty).Split(",");
+                return FindByCondition( o => o.CustomerID.Contains(search[2]) || o.ShipCountry.Contains(search[2])
+                        ||  o.OrderDate.Equals(search[2]) || o.Freight.ToString().Contains(search[2])
+                        || o.ShipVia.ToString().Contains(search[2]))
+                    .ToList();
+            }
+            else {
+                return FindAll()
                 .ToList();
+            }
         }
         public Order FindOrder(int Id)
         {
@@ -27,6 +38,7 @@ namespace Repository
         public void CreateOrder(Order order)
         {
             order.Id = Guid.NewGuid();
+            order.OrderID = FindAll().Max(o => o.OrderID) + 1;
             Create(order);
         }
         public void UpdateOrder(Order order)

@@ -33,11 +33,12 @@ namespace QA.Server.Controllers
             _apiurl = _configuration.GetValue<string>("WebAPIBaseUrl");
         }
         [HttpGet("Orders")]
-        public IActionResult Orders()
+        public IActionResult Orders( [FromQuery] string filter)
         {
             try
             {
-                var orders = _repository.Order.OrdersLookup();
+                
+                var orders = _repository.Order.OrdersLookup(filter);
                 _logger.LogInfo($"Returned all orders from database.");
                 var ordersResult = _mapper.Map<IEnumerable<OrderDto>>(orders);
                 decimal[] sum = new decimal[1];
@@ -128,6 +129,34 @@ namespace QA.Server.Controllers
                 }
                 JsonConvert.PopulateObject(order.values, orderEntity);
                 _repository.Order.UpdateOrder(orderEntity);
+                _repository.Save();
+                var orderresult = _mapper.Map<OrderDto>(orderEntity);
+                return Ok(orderresult);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Something went wrong inside UpdateOrder action: {ex.Message}");
+                return StatusCode(500, "Internal server error");
+            }
+        }
+        [HttpPost("InsertOrder")]
+        public IActionResult InsertOrder([FromForm] OrderFormDto order)
+        {
+            try
+            {
+                if (order == null)
+                {
+                    _logger.LogError("order object sent from client is null.");
+                    return BadRequest("order object is null");
+                }
+                if (!ModelState.IsValid)
+                {
+                    _logger.LogError("Invalid order object sent from client.");
+                    return BadRequest("Invalid model object");
+                }
+                var orderEntity = new Order();
+                JsonConvert.PopulateObject(order.values, orderEntity);
+                _repository.Order.CreateOrder(orderEntity);
                 _repository.Save();
                 var orderresult = _mapper.Map<OrderDto>(orderEntity);
                 return Ok(orderresult);

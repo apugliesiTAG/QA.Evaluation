@@ -29,7 +29,7 @@ const apiurl = 'http://localhost:5000/api';
 const dataSource = createStore({
   key: 'OrderID',
   loadUrl: `${apiurl}/Order/Orders`,
-  insertUrl: `${url}/InsertOrder`,
+  insertUrl: `${apiurl}/Order/InsertOrder`,
   updateUrl: `${apiurl}/Order/UpdateOrder`,
   deleteUrl: `${apiurl}/Order/DeleteOrder`,
   onBeforeSend: (method, ajaxOptions) => {
