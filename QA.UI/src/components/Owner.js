@@ -19,12 +19,17 @@ import {
   GroupItem,
   TotalItem,
   ValueFormat,
+  Pager, Paging 
 } from 'devextreme-react/data-grid';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
+import SelectBox from 'devextreme-react/select-box';
+import CheckBox from 'devextreme-react/check-box';
 import MasterDetailGrid from './MasterDetailGrid.js';
 
 const url = 'https://js.devexpress.com/Demos/Mvc/api/DataGridWebApi';
 const apiurl = 'http://localhost:5000/api';
+const displayModes = [{ text: 'Display Mode \'full\'', value: 'full' }, { text: 'Display Mode \'compact\'', value: 'compact' }];
+const allowedPageSizes = [5, 10, 50, 100, 'all'];
 
 const dataSource = createStore({
   key: 'OrderID',
@@ -54,13 +59,49 @@ const shippersData = createStore({
 });
 
 class Owner extends React.Component {
+  displayModeChange = (value) => {
+    this.setState({ ...this.state, displayMode: value });
+  }
+
+  showPageSizeSelectorChange = (value) => {
+    this.setState({ ...this.state, showPageSizeSelector: value });
+  }
+
+  showInfoChange = (value) => {
+    this.setState({ ...this.state, showInfo: value });
+  }
+
+  showNavButtonsChange = (value) => {
+    this.setState({ ...this.state, showNavButtons: value });
+  }
+
+  isCompactMode() {
+    return this.state.displayMode === 'compact';
+  }
+
+  customizeColumns(columns) {
+    columns[0].width = 70;
+  }
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      displayMode: 'full',
+      showPageSizeSelector: true,
+      showInfo: true,
+      showNavButtons: true,
+    };
+  }
   render() {
     return (
       <DataGrid
+        id='gridContainer'
         dataSource={dataSource}
         showBorders={true}
         height={600}
         remoteOperations={true}
+        keyExpr="id"
+        customizeColumns={this.customizeColumns}
       >
         <MasterDetail
           enabled={true}
@@ -70,6 +111,14 @@ class Owner extends React.Component {
         <HeaderFilter visible={true} />
         <GroupPanel visible={true} />
         <Scrolling mode="virtual" />
+        <Paging defaultPageSize={10} />
+          <Pager
+            visible={true}
+            allowedPageSizes={allowedPageSizes}
+            displayMode={this.state.displayMode}
+            showPageSizeSelector={this.state.showPageSizeSelector}
+            showInfo={this.state.showInfo}
+            showNavigationButtons={this.state.showNavButtons} />
         <Editing
           mode="row"
           allowAdding={true}
