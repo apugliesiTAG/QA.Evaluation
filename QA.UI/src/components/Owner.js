@@ -80,7 +80,7 @@ class Owner extends React.Component {
   }
 
   customizeColumns(columns) {
-    columns[0].width = 70;
+    columns[0].width = 120;
   }
 
   constructor(props) {
