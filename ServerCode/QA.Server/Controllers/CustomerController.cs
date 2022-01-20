@@ -45,7 +45,7 @@ namespace QA.Server.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"Something went wrong inside CustomersLookup action: {ex.Message}");
-                return StatusCode(500, "Internal server error");
+                return StatusCode(500, "Internal server error:" + ex.Message);
             }
         }
         [HttpGet("PopulateCustomer")]
@@ -74,7 +74,7 @@ namespace QA.Server.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"Something went wrong inside PopulateCustomer action: {ex.Message}");
-                return StatusCode(500, "Internal server error");
+                return StatusCode(500, "Internal server error:" + ex.Message);
             }
         }
         [HttpPost("Create")]

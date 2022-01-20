@@ -22,12 +22,10 @@ import {
   Pager, Paging 
 } from 'devextreme-react/data-grid';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
-import SelectBox from 'devextreme-react/select-box';
-import CheckBox from 'devextreme-react/check-box';
-import MasterDetailGrid from './MasterDetailGrid.js';
 
 const url = 'https://js.devexpress.com/Demos/Mvc/api/DataGridWebApi';
 const apiurl = 'http://localhost:5000/api';
+//const apiurl = 'http://azvd6-16q7:5100/api';
 const displayModes = [{ text: 'Display Mode \'full\'', value: 'full' }, { text: 'Display Mode \'compact\'', value: 'compact' }];
 const allowedPageSizes = [5, 10, 50, 100, 'all'];
 
@@ -103,10 +101,6 @@ class Owner extends React.Component {
         keyExpr="id"
         customizeColumns={this.customizeColumns}
       >
-        <MasterDetail
-          enabled={true}
-          component={MasterDetailGrid}
-        />
         <FilterRow visible={true} />
         <HeaderFilter visible={true} />
         <GroupPanel visible={true} />

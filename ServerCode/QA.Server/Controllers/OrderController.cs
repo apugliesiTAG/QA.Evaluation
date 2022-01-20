@@ -33,17 +33,34 @@ namespace QA.Server.Controllers
             _apiurl = _configuration.GetValue<string>("WebAPIBaseUrl");
         }
         [HttpGet("Orders")]
-        public IActionResult Orders( [FromQuery] string filter)
+        public IActionResult Orders( [FromQuery] string filter, [FromQuery] int skip,  [FromQuery] int take, 
+                            [FromQuery] bool requireTotalCount, [FromQuery] string group, [FromQuery] string totalSummary)
         {
             try
             {
                 
-                var orders = _repository.Order.OrdersLookup(filter);
+                var orders = _repository.Order.OrdersLookup(filter, skip, take);
                 _logger.LogInfo($"Returned all orders from database.");
                 var ordersResult = _mapper.Map<IEnumerable<OrderDto>>(orders);
                 decimal[] sum = new decimal[1];
                 sum[0] = ordersResult.Sum(o => o.Freight);
-                return Ok(new { data = ordersResult, summary = sum  });
+                if (requireTotalCount)
+                {
+                    int total = _repository.Order.totalCount();
+                    return Ok(new { data = ordersResult, summary = sum, totalCount = total });
+                }
+                else
+                {
+                    if (totalSummary != null && totalSummary.Length > 0)
+                    {
+                        return Ok(new { data = ordersResult, summary = sum });
+                    }
+                    else
+                    {
+                        return Ok(new { data = ordersResult });
+                    }
+                }
+                
             }
             catch (Exception ex)
             {

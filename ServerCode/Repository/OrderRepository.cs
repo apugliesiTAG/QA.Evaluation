@@ -14,7 +14,7 @@ namespace Repository
             : base(repositoryContext)
         {
         }
-        public IEnumerable<Order> OrdersLookup(string filter)
+        public IEnumerable<Order> OrdersLookup(string filter, int skip = 0 , int take = 0)
         {
             if (filter != null && filter.Trim().Length > 0)
             {
@@ -23,17 +23,33 @@ namespace Repository
                 return FindByCondition( o => o.CustomerID.Contains(search[2]) || o.ShipCountry.Contains(search[2])
                         ||  o.OrderDate.Equals(search[2]) || o.Freight.ToString().Contains(search[2])
                         || o.ShipVia.ToString().Contains(search[2]))
+                    .Skip(skip)
+                    .Take(take)
                     .ToList();
             }
             else {
-                return FindAll()
-                .ToList();
+                if (take == 0)
+                {
+                    return FindAll()
+                    .ToList();
+                }
+                else
+                {
+                    return FindAll()
+                    .Skip(skip)
+                    .Take(take)
+                    .ToList();
+                }
             }
         }
         public Order FindOrder(int Id)
         {
             return FindByCondition(o => o.OrderID == Id )
                 .FirstOrDefault();
+        }
+        public int totalCount()
+        {
+            return FindAll().Count();
         }
         public void CreateOrder(Order order)
         {
