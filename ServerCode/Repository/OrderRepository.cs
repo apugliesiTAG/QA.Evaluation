@@ -29,9 +29,26 @@ namespace Repository
             {
                 string[] search = filter.Replace("\"", string.Empty).Replace("[", string.Empty)
                                     .Replace("]", string.Empty).Split(",");
-                return FindByCondition( o => o.CustomerID.Contains(search[2]) || o.ShipCountry.Contains(search[2])
-                        ||  o.OrderDate.Equals(search[2]) || o.Freight.ToString().Contains(search[2])
-                        || o.ShipVia.ToString().Contains(search[2]))
+                switch (search[0])
+                {
+                    case "CustomerID":
+                        predicate.Or(x => x.CustomerID.Contains(search[2]));
+                        break;
+                    case "ShipCountry":
+                        predicate.Or(x => x.ShipCountry.Contains(search[2]));
+                        break;
+                    case "OrderDate":
+                        predicate.Or(x => x.OrderDate.Equals(search[2]));
+                        break;
+                    case "Freight":
+                        predicate.Or(x => x.Freight.ToString().Contains(search[2]));
+                        break;
+                    case "ShipVia":
+                        predicate.Or(x => x.ShipVia.ToString().Contains(search[2]));
+                        break;
+                }
+
+                return FindByCondition(predicate)
                     .Skip(skip)
                     .Take(take)
                     .ToList();
