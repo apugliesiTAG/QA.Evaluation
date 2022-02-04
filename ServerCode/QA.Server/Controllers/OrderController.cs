@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Contracts;
 using Entities.DataTransferObjects;
+using Entities.Helpers;
 using Entities.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -43,6 +44,12 @@ namespace QA.Server.Controllers
                 var orders = _repository.Order.OrdersLookup(filter, skip, take, sort);
                 _logger.LogInfo($"Returned all orders from database.");
                 var ordersResult = _mapper.Map<IEnumerable<OrderDto>>(orders);
+                var groupOptions = new List<OrderGroup>();
+                if (group != null)
+                {
+                    groupOptions = JsonConvert.DeserializeObject<List<OrderGroup>>(group);
+                    return Ok(new { data = getGroupedResult(ordersResult,groupOptions) });
+                }
                 decimal[] sum = new decimal[1];
                 sum[0] = ordersResult.Sum(o => o.Freight);
                 if (requireTotalCount)
@@ -69,6 +76,24 @@ namespace QA.Server.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
+
+        private object getGroupedResult(IEnumerable<OrderDto> ordersResult, List<OrderGroup> groupOptions)
+        {
+            switch (groupOptions.FirstOrDefault().selector)
+            {
+                case "ShipCountry":
+                    return ordersResult.Select(x => new { key = x.ShipCountry, items = 0, count = 1 }).ToList();
+                    break;
+                case "OrderDate":
+                    return ordersResult.Select(x => new { key = x.OrderDate, items = 0, count = 1 }).ToList();
+                    break;
+                case "Freight":
+                    return ordersResult.Select(x => new { key = x.Freight, items = 0, count = 1 }).ToList();
+                    break;
+            }
+            return null;
+        }
+
         [HttpGet("PopulateOrders")]
         public async Task<IActionResult> PopulateOrders()
         {

@@ -21,31 +21,35 @@ namespace Repository
         {
             var predicate = PredicateBuilder.New<Order>();
             var sortOptions = new List<OrderSort>();
+            var filterOptions = new List<List<string>>();
             if (sort != null)
             {
                 sortOptions = JsonConvert.DeserializeObject<List<OrderSort>>(sort);
             }
             if (filter != null && filter.Trim().Length > 0)
             {
-                string[] search = filter.Replace("\"", string.Empty).Replace("[", string.Empty)
-                                    .Replace("]", string.Empty).Split(",");
-                switch (search[0])
+                filter = filter.Replace("\"or\",","");
+                filterOptions = JsonConvert.DeserializeObject<List<List<string>>>(filter);
+                foreach (var search in filterOptions)
                 {
-                    case "CustomerID":
-                        predicate.Or(x => x.CustomerID.Contains(search[2]));
-                        break;
-                    case "ShipCountry":
-                        predicate.Or(x => x.ShipCountry.Contains(search[2]));
-                        break;
-                    case "OrderDate":
-                        predicate.Or(x => x.OrderDate.Equals(search[2]));
-                        break;
-                    case "Freight":
-                        predicate.Or(x => x.Freight.ToString().Contains(search[2]));
-                        break;
-                    case "ShipVia":
-                        predicate.Or(x => x.ShipVia.ToString().Contains(search[2]));
-                        break;
+                    switch (search[0])
+                    {
+                        case "CustomerID":
+                            predicate.Or(x => x.CustomerID.Contains(search[2]));
+                            break;
+                        case "ShipCountry":
+                            predicate.Or(x => x.ShipCountry.Contains(search[2]));
+                            break;
+                        case "OrderDate":
+                            predicate.Or(x => x.OrderDate.Equals(search[2]));
+                            break;
+                        case "Freight":
+                            predicate.Or(x => x.Freight.ToString().Contains(search[2]));
+                            break;
+                        case "ShipVia":
+                            predicate.Or(x => x.ShipVia.ToString().Contains(search[2]));
+                            break;
+                    }
                 }
 
                 return FindByCondition(predicate)
