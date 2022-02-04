@@ -7,7 +7,7 @@ namespace Contracts
 {
     public interface IOrderRepository
     {
-        IEnumerable<Order> OrdersLookup(string filter, int skip, int take);
+        IEnumerable<Order> OrdersLookup(string filter, int skip, int take, string sort = null);
         Order FindOrder(int Id);
         int totalCount();
         void CreateOrder(Order order);

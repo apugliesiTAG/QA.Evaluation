@@ -32,6 +32,7 @@ const allowedPageSizes = [5, 10, 50, 100, 'all'];
 const dataSource = createStore({
   key: 'OrderID',
   loadUrl: `${apiurl}/Order/Orders`,
+  //loadUrl: `${url}/Orders`,
   insertUrl: `${apiurl}/Order/InsertOrder`,
   updateUrl: `${apiurl}/Order/UpdateOrder`,
   deleteUrl: `${apiurl}/Order/DeleteOrder`,
@@ -96,15 +97,15 @@ class Owner extends React.Component {
         id='gridContainer'
         dataSource={dataSource}
         showBorders={true}
-        height={600}
+        height={700}
         remoteOperations={true}
         keyExpr="id"
         customizeColumns={this.customizeColumns}
       >
         <FilterRow visible={true} />
         <HeaderFilter visible={true} />
-        <GroupPanel visible={true} />
-        <Scrolling mode="virtual" />
+        <GroupPanel visible={false} />
+        <Scrolling mode="standard" />
         <Paging defaultPageSize={10} />
           <Pager
             visible={true}
@@ -120,7 +121,6 @@ class Owner extends React.Component {
           allowUpdating={true}
         />
         <Grouping autoExpandAll={false} />
-
         <Column dataField="CustomerID" caption="Custoemr">
           <Lookup dataSource={customersData} valueExpr="Value" displayExpr="Text" />
           <StringLengthRule max={5} message="The field Customer must be a string with a maximum length of 5." />

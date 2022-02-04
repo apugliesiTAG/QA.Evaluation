@@ -1,6 +1,9 @@
 ﻿using Contracts;
 using Entities;
 using Entities.Models;
+using Entities.Helpers;
+using LinqKit;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,8 +17,14 @@ namespace Repository
             : base(repositoryContext)
         {
         }
-        public IEnumerable<Order> OrdersLookup(string filter, int skip = 0 , int take = 0)
+        public IEnumerable<Order> OrdersLookup(string filter, int skip = 0 , int take = 0, string sort = null)
         {
+            var predicate = PredicateBuilder.New<Order>();
+            var sortOptions = new List<OrderSort>();
+            if (sort != null)
+            {
+                sortOptions = JsonConvert.DeserializeObject<List<OrderSort>>(sort);
+            }
             if (filter != null && filter.Trim().Length > 0)
             {
                 string[] search = filter.Replace("\"", string.Empty).Replace("[", string.Empty)

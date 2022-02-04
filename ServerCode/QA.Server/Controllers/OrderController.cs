@@ -34,12 +34,13 @@ namespace QA.Server.Controllers
         }
         [HttpGet("Orders")]
         public IActionResult Orders( [FromQuery] string filter, [FromQuery] int skip,  [FromQuery] int take, 
-                            [FromQuery] bool requireTotalCount, [FromQuery] string group, [FromQuery] string totalSummary)
+                            [FromQuery] bool requireTotalCount, [FromQuery] string group, [FromQuery] string totalSummary,
+                            [FromQuery] string sort)
         {
             try
             {
                 
-                var orders = _repository.Order.OrdersLookup(filter, skip, take);
+                var orders = _repository.Order.OrdersLookup(filter, skip, take, sort);
                 _logger.LogInfo($"Returned all orders from database.");
                 var ordersResult = _mapper.Map<IEnumerable<OrderDto>>(orders);
                 decimal[] sum = new decimal[1];
