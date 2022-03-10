@@ -24,8 +24,8 @@ import {
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 
 const url = 'https://js.devexpress.com/Demos/Mvc/api/DataGridWebApi';
-const apiurl = 'http://localhost:5000/api';
-//const apiurl = 'http://azvd6-16q7:5100/api';
+//const apiurl = 'http://localhost:5000/api';
+const apiurl = 'http://azvd6-16q7:5100/api';
 const displayModes = [{ text: 'Display Mode \'full\'', value: 'full' }, { text: 'Display Mode \'compact\'', value: 'compact' }];
 const allowedPageSizes = [5, 10, 50, 100, 'all'];
 
@@ -102,8 +102,7 @@ class Owner extends React.Component {
         keyExpr="id"
         customizeColumns={this.customizeColumns}
       >
-        <FilterRow visible={true} />
-        <HeaderFilter visible={true} />
+        <HeaderFilter visible={true} allowSearch={true} />
         <GroupPanel visible={false} />
         <Scrolling mode="standard" />
         <Paging defaultPageSize={10} />
@@ -120,7 +119,7 @@ class Owner extends React.Component {
           allowDeleting={true}
           allowUpdating={true}
         />
-        <Grouping autoExpandAll={false} />
+        <Grouping autoExpandAll={true} />
         <Column dataField="CustomerID" caption="Custoemr">
           <Lookup dataSource={customersData} valueExpr="Value" displayExpr="Text" />
           <StringLengthRule max={5} message="The field Customer must be a string with a maximum length of 5." />
@@ -131,7 +130,6 @@ class Owner extends React.Component {
         </Column>
 
         <Column dataField="Freight" caption="Weight">
-          <HeaderFilter groupInterval={100} />
           <RangeRule min={0} max={2000} message="The field Freight must be between 0 and 2000." />
         </Column>
 
