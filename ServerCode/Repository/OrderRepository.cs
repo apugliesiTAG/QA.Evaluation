@@ -28,9 +28,10 @@ namespace Repository
             }
             if (filter != null && filter.Trim().Length > 0)
             {
-                if (filter.Contains("\"or\""))
+                if (filter.Contains("\"or\"") || filter.Contains("\"contains\"") || filter.Contains("\"and\""))
                 {
                     filter = filter.Replace("\"or\",", "");
+                    filter = filter.Replace("\"and\",", "");
                     filterOptions = JsonConvert.DeserializeObject<List<List<string>>>(filter);
                 }
                 else
@@ -43,19 +44,19 @@ namespace Repository
                     switch (search[0])
                     {
                         case "CustomerID":
-                            predicate.Or(x => x.CustomerID.Contains(search[2]));
+                            predicate.Or(x => x.CustomerID.Contains(search.Count <= 2 ? "" : search[2]));
                             break;
                         case "ShipCountry":
-                            predicate.Or(x => x.ShipCountry.Contains(search[2]));
+                            predicate.Or(x => x.ShipCountry.Contains(search.Count <= 2 ? "" : search[2]));
                             break;
                         case "OrderDate":
-                            predicate.Or(x => x.OrderDate.Equals(search[2]));
+                            predicate.Or(x => x.OrderDate.Equals(search.Count <= 2 ? "": search[2]));
                             break;
                         case "Freight":
-                            predicate.Or(x => x.Freight.ToString().Contains(search[2]));
+                            predicate.Or(x => x.Freight.ToString().Contains(search.Count <= 2 ? "" : search[2]));
                             break;
                         case "ShipVia":
-                            predicate.Or(x => x.ShipVia.ToString().Contains(search[2]));
+                            predicate.Or(x => x.ShipVia.ToString().Contains(search.Count <= 2 ? "" : search[2]));
                             break;
                     }
                 }
@@ -92,13 +93,6 @@ namespace Repository
         public void CreateOrder(Order order)
         {
             order.Id = Guid.NewGuid();
-            if (FindAll().Count() > 0)
-            {
-                order.OrderID = FindAll().Max(o => o.OrderID) + 1;
-            }
-            else {
-                order.OrderID = 1;
-            }
             Create(order);
         }
         public void UpdateOrder(Order order)

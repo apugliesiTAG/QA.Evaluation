@@ -109,6 +109,11 @@ namespace QA.Server.Controllers
                 {
                     var result = await response.Content.ReadAsStringAsync();
                     var Orders = JsonConvert.DeserializeObject<ExternalApiOrderResponseDto>(result);
+                    Orders.data.ForEach(c => {
+                        int count = 1;
+                        c.OrderID = count;
+                        count++;
+                    });
                     Orders.data.ForEach(c => _repository.Order.CreateOrder(_mapper.Map<Order>(c)));
                    _logger.LogInfo($"Orders table were populated.");
                     _repository.Save();
