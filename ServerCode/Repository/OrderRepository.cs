@@ -95,6 +95,10 @@ namespace Repository
             order.Id = Guid.NewGuid();
             Create(order);
         }
+        public void DeleteAllOrders()
+        {
+            FindAll().ForEach(o => DeleteOrder(o));
+        }
         public void UpdateOrder(Order order)
         {
             Update(order);

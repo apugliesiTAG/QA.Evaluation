@@ -97,8 +97,8 @@ namespace QA.Server.Controllers
             return ordersResult;
         }
 
-        [HttpGet("PopulateOrders")]
-        public async Task<IActionResult> PopulateOrders()
+        [HttpGet("PopulateOrders/{quantity}")]
+        public async Task<IActionResult> PopulateOrders(int quantity)
         {
             try
             {
@@ -107,14 +107,22 @@ namespace QA.Server.Controllers
                                                 .GetAsync(_apiurl + "/Orders").ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
                 {
+                    _repository.Order.DeleteAllOrders();
                     var result = await response.Content.ReadAsStringAsync();
                     var Orders = JsonConvert.DeserializeObject<ExternalApiOrderResponseDto>(result);
+                    int count = 1;
                     Orders.data.ForEach(c => {
-                        int count = 1;
                         c.OrderID = count;
                         count++;
                     });
-                    Orders.data.ForEach(c => _repository.Order.CreateOrder(_mapper.Map<Order>(c)));
+                    count = 1;
+                    Orders.data.ForEach(c => {
+                        if (count <= quantity)
+                        {
+                            _repository.Order.CreateOrder(_mapper.Map<Order>(c));
+                            count++;
+                        }
+                    });
                    _logger.LogInfo($"Orders table were populated.");
                     _repository.Save();
                     return NoContent();

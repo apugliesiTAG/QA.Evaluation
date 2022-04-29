@@ -13,5 +13,6 @@ namespace Contracts
         void CreateOrder(Order order);
         void UpdateOrder(Order order);
         void DeleteOrder(Order order);
+        public void DeleteAllOrders();
     }
 }
